@@ -95,9 +95,9 @@ export default function ScenarioPanel({ scenarios, onSave, onClear, currentParam
                 />
                 <span className="font-semibold">{s.name}</span>
                 {s.corpusZeroAge ? (
-                  <span className="text-[10px] opacity-70">💀 {s.corpusZeroAge}</span>
+                  <span className="text-xs opacity-70">💀 {s.corpusZeroAge}</span>
                 ) : (
-                  <span className="text-[10px] opacity-70">✔ {s.params.lifeExpectancy}+</span>
+                  <span className="text-xs opacity-70">✔ {s.params.lifeExpectancy}+</span>
                 )}
               </div>
             ))}
@@ -108,12 +108,12 @@ export default function ScenarioPanel({ scenarios, onSave, onClear, currentParam
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="age" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickLine={false}
-                  label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 11, fill: '#9CA3AF' }} />
-                <YAxis tickFormatter={yAxisFormatter} tick={{ fontSize: 10, fill: '#9CA3AF' }}
+                <XAxis dataKey="age" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickLine={false}
+                  label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 12, fill: '#9CA3AF' }} />
+                <YAxis tickFormatter={yAxisFormatter} tick={{ fontSize: 12, fill: '#9CA3AF' }}
                   tickLine={false} axisLine={false} width={70} />
                 <Tooltip content={<ScenarioTooltip />} />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '12px' }} iconType="circle" iconSize={8} />
+                <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '12px' }} iconType="circle" iconSize={8} />
                 <ReferenceLine y={0} stroke="#EF4444" strokeWidth={1.5} strokeDasharray="4 2" />
                 {scenarios.map((s, i) => (
                   <Line
@@ -179,7 +179,7 @@ export default function ScenarioPanel({ scenarios, onSave, onClear, currentParam
         </>
       )}
       {scenarios.length >= 5 && (
-        <p className="text-[10px] text-amber-600 mt-2 text-center">Maximum 5 scenarios reached. Clear to add new ones.</p>
+        <p className="text-xs text-amber-600 mt-2 text-center">Maximum 5 scenarios reached. Clear to add new ones.</p>
       )}
     </div>
   );

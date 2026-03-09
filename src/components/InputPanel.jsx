@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SliderInput from './SliderInput';
 import BigExpensesInput from './BigExpensesInput';
 import ExpenseRulesInput from './ExpenseRulesInput';
-import { formatINR, formatPct } from '../utils/formatting';
+import { formatINR } from '../utils/formatting';
 
 function Section({ title, icon, children, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -10,20 +10,20 @@ function Section({ title, icon, children, defaultOpen = true }) {
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex justify-between items-center py-2.5 px-4 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex justify-between items-center py-3 px-4 text-left hover:bg-gray-50 transition-colors"
       >
-        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
-          <span>{icon}</span>
+        <span className="text-sm font-bold text-gray-700 flex items-center gap-2">
+          <span className="text-base">{icon}</span>
           {title}
         </span>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-gray-400 transition-transform flex-shrink-0 ${open ? 'rotate-180' : ''}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {open && <div className="px-4 pb-4 pt-1">{children}</div>}
+      {open && <div className="px-4 pb-5 pt-1">{children}</div>}
     </div>
   );
 }
@@ -36,7 +36,7 @@ export default function InputPanel({ params, onUpdate, onReset }) {
         <h2 className="text-sm font-bold text-gray-700">Simulation Parameters</h2>
         <button
           onClick={onReset}
-          className="text-[10px] text-gray-400 hover:text-blue-600 border border-gray-200 hover:border-blue-300 px-2 py-0.5 rounded transition-colors"
+          className="text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 px-2.5 py-1 rounded transition-colors font-medium"
         >
           Reset Defaults
         </button>
@@ -60,7 +60,7 @@ export default function InputPanel({ params, onUpdate, onReset }) {
             format={v => `${v} yrs`}
           />
           <SliderInput
-            label="Total Net Assets"
+            label="Total Invested Amount"
             value={params.initialCorpus}
             min={5000000} max={500000000} step={5000000}
             onChange={v => onUpdate('initialCorpus', v)}
@@ -90,6 +90,7 @@ export default function InputPanel({ params, onUpdate, onReset }) {
             min={25000} max={500000} step={5000}
             onChange={v => onUpdate('monthlyExpense', v)}
             format={v => formatINR(v)}
+            hint={`≈ ${formatINR(params.monthlyExpense * 12)} per annum`}
           />
           <SliderInput
             label="Additional Monthly Income"
@@ -105,7 +106,7 @@ export default function InputPanel({ params, onUpdate, onReset }) {
             min={0} max={300000} step={5000}
             onChange={v => onUpdate('monthlySIP', v)}
             format={v => v === 0 ? 'None' : formatINR(v)}
-            hint="Ongoing SIP investment after retirement"
+            hint="Ongoing SIP investment post retirement"
           />
         </Section>
 
@@ -119,8 +120,8 @@ export default function InputPanel({ params, onUpdate, onReset }) {
 
         {/* ── Expense Adjustments ── */}
         <Section title="Expense Adjustments by Age" icon="📈" defaultOpen={false}>
-          <p className="text-[10px] text-gray-400 mb-2">
-            Define how your expenses change at specific ages (in addition to base inflation).
+          <p className="text-xs text-gray-500 mb-3">
+            Define how expenses change at specific ages (on top of base inflation).
           </p>
           <ExpenseRulesInput
             rules={params.expenseAdjustments}

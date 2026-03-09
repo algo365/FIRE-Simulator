@@ -45,15 +45,15 @@ export default function ExpenseIncomeChart({ results }) {
           <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
           <XAxis
             dataKey="age"
-            tick={{ fontSize: 11, fill: '#9CA3AF' }}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
             tickLine={false}
             axisLine={{ stroke: '#E5E7EB' }}
-            label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 11, fill: '#9CA3AF' }}
+            label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 12, fill: '#9CA3AF' }}
           />
           <YAxis
             yAxisId="left"
             tickFormatter={yAxisFormatter}
-            tick={{ fontSize: 10, fill: '#9CA3AF' }}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
             tickLine={false}
             axisLine={false}
             width={70}
@@ -62,14 +62,14 @@ export default function ExpenseIncomeChart({ results }) {
             yAxisId="right"
             orientation="right"
             tickFormatter={v => `${v}%`}
-            tick={{ fontSize: 10, fill: '#9CA3AF' }}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
             tickLine={false}
             axisLine={false}
             domain={[0, 'dataMax + 2']}
             width={40}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '12px' }} iconType="circle" iconSize={8} />
+          <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '12px' }} iconType="circle" iconSize={8} />
 
           <Bar yAxisId="left" dataKey="expense" name="Annual Expense" fill="#FCA5A5" opacity={0.8} radius={[2,2,0,0]} />
           <Bar yAxisId="left" dataKey="income"  name="Annual Income"  fill="#86EFAC" opacity={0.8} radius={[2,2,0,0]} />
@@ -86,12 +86,12 @@ export default function ExpenseIncomeChart({ results }) {
 
           {/* 4% rule reference */}
           <ReferenceLine yAxisId="right" y={4} stroke="#F59E0B" strokeDasharray="3 3"
-            label={{ value: '4% Rule', position: 'insideTopRight', fontSize: 9, fill: '#F59E0B' }}
+            label={{ value: '4% Rule', position: 'insideTopRight', fontSize: 11, fill: '#F59E0B' }}
           />
         </ComposedChart>
       </ResponsiveContainer>
 
-      <p className="text-[10px] text-gray-400 mt-2 text-center">
+      <p className="text-xs text-gray-400 mt-2 text-center">
         Right axis: Annual withdrawal rate % — the 4% rule line is shown for reference
       </p>
     </div>

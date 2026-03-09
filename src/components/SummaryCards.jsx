@@ -18,7 +18,7 @@ function Card({ label, value, sub, color = 'blue', icon }) {
         <span className={`text-lg ${c.icon}`}>{icon}</span>
       </div>
       <p className={`text-xl font-bold ${c.text} tabular-nums leading-tight`}>{value}</p>
-      {sub && <p className="text-[11px] text-gray-500 leading-tight">{sub}</p>}
+      {sub && <p className="text-xs text-gray-500 leading-tight">{sub}</p>}
     </div>
   );
 }

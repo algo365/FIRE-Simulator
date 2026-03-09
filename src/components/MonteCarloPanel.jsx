@@ -60,7 +60,7 @@ export default function MonteCarloPanel({ params }) {
                 : 'bg-red-50 border-red-200'
             }`}
           >
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
               Survival to {params.lifeExpectancy}
             </p>
             <p
@@ -81,7 +81,7 @@ export default function MonteCarloPanel({ params }) {
       {/* Controls */}
       <div className="flex flex-wrap items-end gap-4 mb-5 p-3 bg-gray-50 rounded-lg">
         <div>
-          <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
             Simulations
           </label>
           <select
@@ -95,7 +95,7 @@ export default function MonteCarloPanel({ params }) {
           </select>
         </div>
         <div>
-          <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
             Return Volatility (σ)
           </label>
           <select
@@ -163,17 +163,17 @@ export default function MonteCarloPanel({ params }) {
         <ResponsiveContainer width="100%" height={300}>
           <ComposedChart data={result.data} margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-            <XAxis dataKey="age" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickLine={false}
-              label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 11, fill: '#9CA3AF' }} />
+            <XAxis dataKey="age" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickLine={false}
+              label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 12, fill: '#9CA3AF' }} />
             <YAxis tickFormatter={v => `${v}%`} domain={[0, 100]}
-              tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} width={40} />
+              tick={{ fontSize: 12, fill: '#9CA3AF' }} tickLine={false} axisLine={false} width={40} />
             <Tooltip content={<SurvivalTooltip />} />
-            <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+            <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
 
             <ReferenceLine y={80} stroke="#10b981" strokeDasharray="3 3"
-              label={{ value: '80% safe', position: 'insideTopRight', fontSize: 9, fill: '#10b981' }} />
+              label={{ value: '80% safe', position: 'insideTopRight', fontSize: 11, fill: '#10b981' }} />
             <ReferenceLine y={50} stroke="#f59e0b" strokeDasharray="3 3"
-              label={{ value: '50%', position: 'insideTopRight', fontSize: 9, fill: '#f59e0b' }} />
+              label={{ value: '50%', position: 'insideTopRight', fontSize: 11, fill: '#f59e0b' }} />
 
             <Area type="monotone" dataKey="probability" name="Survival Probability"
               stroke={COLORS.primary} strokeWidth={2.5} fill={COLORS.primary} fillOpacity={0.15} dot={false} />
@@ -191,12 +191,12 @@ export default function MonteCarloPanel({ params }) {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
-            <XAxis dataKey="age" tick={{ fontSize: 11, fill: '#9CA3AF' }} tickLine={false}
-              label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 11, fill: '#9CA3AF' }} />
-            <YAxis tickFormatter={yAxisFormatter} tick={{ fontSize: 10, fill: '#9CA3AF' }}
+            <XAxis dataKey="age" tick={{ fontSize: 12, fill: '#9CA3AF' }} tickLine={false}
+              label={{ value: 'Age', position: 'insideBottom', offset: -12, fontSize: 12, fill: '#9CA3AF' }} />
+            <YAxis tickFormatter={yAxisFormatter} tick={{ fontSize: 12, fill: '#9CA3AF' }}
               tickLine={false} axisLine={false} width={70} />
             <Tooltip content={<SurvivalTooltip />} />
-            <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+            <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
 
             <ReferenceLine y={0} stroke="#EF4444" strokeWidth={1.5} strokeDasharray="4 2" />
 
@@ -220,15 +220,15 @@ export default function MonteCarloPanel({ params }) {
       {result && (
         <div className="mt-4 grid grid-cols-3 gap-3 text-center">
           <div className="bg-gray-50 rounded-lg p-2.5">
-            <p className="text-[10px] text-gray-500 uppercase tracking-wide">Simulations Run</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">Simulations Run</p>
             <p className="text-sm font-bold text-gray-700">{result.numSims.toLocaleString()}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-2.5">
-            <p className="text-[10px] text-gray-500 uppercase tracking-wide">Return Volatility</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">Return Volatility</p>
             <p className="text-sm font-bold text-gray-700">σ = {volatility}%</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-2.5">
-            <p className="text-[10px] text-gray-500 uppercase tracking-wide">Median Depletion</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">Median Depletion</p>
             <p className="text-sm font-bold text-gray-700">
               {result.medianDepletionAge ? `Age ${result.medianDepletionAge}` : `Age ${params.lifeExpectancy}+`}
             </p>
