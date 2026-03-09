@@ -32,12 +32,113 @@ const TABS = [
   { id: 'scenarios',  label: '📋 Scenarios',   short: '📋' },
 ];
 
+/* ─── Hero Banner ────────────────────────────────────────────── */
+function HeroBanner({ onDismiss }) {
+  return (
+    <div className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border border-blue-100 rounded-xl overflow-hidden">
+      {/* Accent bar */}
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-l-xl" />
+
+      {/* Dismiss button */}
+      <button
+        onClick={onDismiss}
+        className="absolute top-3 right-3 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-white/60 transition-colors"
+        aria-label="Dismiss"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div className="pl-5 pr-10 py-4 sm:pl-6 sm:pr-12 sm:py-5">
+        {/* Headline */}
+        <p className="text-base sm:text-lg font-black text-gray-800 leading-snug mb-2">
+          <span className="text-blue-600">"How much is enough?"</span>
+          {' '}— Most of us never stop to ask.
+        </p>
+
+        {/* Body */}
+        <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed mb-2">
+          We chase more — a bigger salary, a larger corpus, one more promotion — yet the
+          finish line keeps moving. Not because we're greedy, but because{' '}
+          <span className="font-semibold text-gray-700">nobody ever told us where to stop.</span>
+        </p>
+        <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed mb-2">
+          <span className="font-bold text-indigo-700">FIRE</span>
+          {' '}— <em>Financial Independence, Retire Early</em> — is not about quitting
+          work and lying on a beach. It's about reaching the point where{' '}
+          <span className="font-semibold text-gray-700">work becomes a choice, not a compulsion.</span>
+          {' '}The freedom to pursue what genuinely matters — to you, your family, and the world.
+        </p>
+        <p className="text-sm sm:text-[15px] text-indigo-700 font-semibold leading-relaxed">
+          🔥 This simulator helps you answer the one question most financial plans ignore:{' '}
+          <span className="italic">"Do I already have enough?"</span>
+        </p>
+
+        {/* Chips */}
+        <div className="flex flex-wrap gap-2 mt-3">
+          {[
+            { icon: '📐', label: 'SWP Withdrawal Model' },
+            { icon: '🎲', label: 'Monte Carlo Risk Analysis' },
+            { icon: '📊', label: 'Inflation-Adjusted Projections' },
+            { icon: '🇮🇳', label: 'India Edition (₹)' },
+          ].map(chip => (
+            <span
+              key={chip.label}
+              className="inline-flex items-center gap-1.5 text-xs bg-white/70 border border-blue-100 rounded-full px-3 py-1 text-blue-700 font-medium whitespace-nowrap"
+            >
+              <span>{chip.icon}</span>
+              {chip.label}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page Footer ────────────────────────────────────────────── */
+function PageFooter() {
+  return (
+    <footer className="border-t border-gray-200 mt-6 pt-5 pb-20 sm:pb-6 space-y-3">
+      {/* Disclaimer */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex gap-2.5 items-start">
+        <span className="text-amber-500 text-base flex-shrink-0 mt-0.5">⚠</span>
+        <p className="text-xs text-amber-800 leading-relaxed">
+          <span className="font-bold">Disclaimer:</span>{' '}
+          This tool is based on established SWP (Systematic Withdrawal Plan) models.
+          Please tweak inputs as per your investment style and actual expenses.
+          This is for educational purposes only and does not constitute financial advice.
+        </p>
+      </div>
+
+      {/* Credit + fine print */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs text-gray-400 text-center">
+        <span>Designed and developed by</span>
+        <a
+          href="https://www.algorithms365.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-700 font-semibold transition-colors"
+        >
+          algorithms365.com
+        </a>
+        <span className="hidden sm:inline">·</span>
+        <span>Not financial advice</span>
+      </div>
+    </footer>
+  );
+}
+
 /* ─── Main App ───────────────────────────────────────────────── */
 export default function App() {
-  const [params,      setParams]      = useState(DEFAULT_PARAMS);
-  const [scenarios,   setScenarios]   = useState([]);
-  const [activeTab,   setActiveTab]   = useState('overview');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [params,        setParams]        = useState(DEFAULT_PARAMS);
+  const [scenarios,     setScenarios]     = useState([]);
+  const [activeTab,     setActiveTab]     = useState('overview');
+  const [sidebarOpen,   setSidebarOpen]   = useState(false);
+  const [heroDismissed, setHeroDismissed] = useState(
+    () => localStorage.getItem('fire_hero_dismissed') === '1'
+  );
 
   /* ── Simulation results ──────────────────────────────────── */
   const { results, corpusZeroAge } = useMemo(
@@ -54,6 +155,12 @@ export default function App() {
     setParams(prev => ({ ...prev, [key]: value }));
   }, []);
   const resetParams = useCallback(() => setParams(DEFAULT_PARAMS), []);
+
+  /* ── Hero dismiss ────────────────────────────────────────── */
+  const dismissHero = useCallback(() => {
+    localStorage.setItem('fire_hero_dismissed', '1');
+    setHeroDismissed(true);
+  }, []);
 
   /* ── Scenario management ─────────────────────────────────── */
   const saveScenario = useCallback(
@@ -162,7 +269,10 @@ export default function App() {
         <main className="flex-1 overflow-y-auto custom-scroll min-w-0">
           <div className="p-3 sm:p-5 space-y-4 sm:space-y-5">
 
-            {/* Tabs */}
+            {/* ── Hero Banner ── */}
+            {!heroDismissed && <HeroBanner onDismiss={dismissHero} />}
+
+            {/* ── Tabs ── */}
             <div className="flex bg-white border border-gray-200 rounded-xl p-1 shadow-sm w-full sm:w-fit gap-1">
               {TABS.map(tab => (
                 <button
@@ -180,7 +290,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* Overview */}
+            {/* ── Overview ── */}
             {activeTab === 'overview' && (
               <>
                 <SummaryCards results={results} corpusZeroAge={corpusZeroAge} params={params} />
@@ -190,10 +300,10 @@ export default function App() {
               </>
             )}
 
-            {/* Monte Carlo */}
+            {/* ── Monte Carlo ── */}
             {activeTab === 'montecarlo' && <MonteCarloPanel params={params} />}
 
-            {/* Scenarios */}
+            {/* ── Scenarios ── */}
             {activeTab === 'scenarios' && (
               <ScenarioPanel
                 scenarios={scenarios}
@@ -202,6 +312,10 @@ export default function App() {
                 currentParams={params}
               />
             )}
+
+            {/* ── Footer (shown on all tabs) ── */}
+            <PageFooter />
+
           </div>
         </main>
       </div>
