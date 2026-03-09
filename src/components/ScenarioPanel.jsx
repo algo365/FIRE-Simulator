@@ -39,7 +39,7 @@ export default function ScenarioPanel({ scenarios, onSave, onClear, currentParam
         <div>
           <h2 className="text-base font-bold text-gray-800">Scenario Comparison</h2>
           <p className="text-xs text-gray-500 mt-0.5">
-            Save the current simulation as a named scenario to compare different assumptions
+            Compare multiple investment strategies side-by-side on the same chart
           </p>
         </div>
         {scenarios.length > 0 && (
@@ -50,6 +50,31 @@ export default function ScenarioPanel({ scenarios, onSave, onClear, currentParam
             Clear All
           </button>
         )}
+      </div>
+
+      {/* ── How-to guide ── */}
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-4">
+        <p className="text-xs font-bold text-indigo-800 uppercase tracking-wide mb-3">📋 How to Use Scenario Comparison</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { step: '1', icon: '⚙️', title: 'Tweak Parameters', desc: 'Use the left panel to adjust CAGR, expenses, corpus, or any other input to represent an investment style.' },
+            { step: '2', icon: '💾', title: 'Save the Scenario', desc: 'Give it a descriptive name (e.g. "Conservative 6%") and click Save Scenario below.' },
+            { step: '3', icon: '📊', title: 'Compare Outcomes', desc: 'Repeat for another strategy. An overlay chart appears once you have 2+ scenarios saved.' },
+          ].map(s => (
+            <div key={s.step} className="flex gap-2.5 items-start">
+              <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                {s.step}
+              </span>
+              <div>
+                <p className="text-xs font-semibold text-indigo-800">{s.icon} {s.title}</p>
+                <p className="text-xs text-indigo-600 leading-relaxed mt-0.5">{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-indigo-500 mt-3 pt-2.5 border-t border-indigo-100">
+          💡 <strong>Demo loaded below</strong> — Conservative (6% CAGR) vs Aggressive (12% CAGR) with the same ₹5 Cr corpus and ₹1.5L/mo expenses, so you can see the impact of return assumptions immediately.
+        </p>
       </div>
 
       {/* Save current scenario */}

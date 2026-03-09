@@ -25,6 +25,26 @@ const DEFAULT_PARAMS = {
   expenseAdjustments:       [],
 };
 
+/* ─── Demo scenarios (pre-computed at load time) ─────────────── */
+const _DEMO_CONS_PARAMS = { ...DEFAULT_PARAMS, cagr: 6 };
+const _DEMO_AGGR_PARAMS = { ...DEFAULT_PARAMS, cagr: 12 };
+const _demoConsResult   = runSimulation(_DEMO_CONS_PARAMS);
+const _demoAggrResult   = runSimulation(_DEMO_AGGR_PARAMS);
+const DEFAULT_SCENARIOS = [
+  {
+    name: '🐢 Conservative — 6% CAGR',
+    params: _DEMO_CONS_PARAMS,
+    results: _demoConsResult.results,
+    corpusZeroAge: _demoConsResult.corpusZeroAge,
+  },
+  {
+    name: '🚀 Aggressive — 12% CAGR',
+    params: _DEMO_AGGR_PARAMS,
+    results: _demoAggrResult.results,
+    corpusZeroAge: _demoAggrResult.corpusZeroAge,
+  },
+];
+
 /* ─── Tab definitions ────────────────────────────────────────── */
 const TABS = [
   { id: 'overview',    label: '📊 Overview',   short: '📊' },
@@ -133,7 +153,7 @@ function PageFooter() {
 /* ─── Main App ───────────────────────────────────────────────── */
 export default function App() {
   const [params,        setParams]        = useState(DEFAULT_PARAMS);
-  const [scenarios,     setScenarios]     = useState([]);
+  const [scenarios,     setScenarios]     = useState(DEFAULT_SCENARIOS);
   const [activeTab,     setActiveTab]     = useState('overview');
   const [sidebarOpen,   setSidebarOpen]   = useState(false);
   const [heroDismissed, setHeroDismissed] = useState(

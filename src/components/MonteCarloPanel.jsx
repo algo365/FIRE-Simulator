@@ -78,6 +78,22 @@ export default function MonteCarloPanel({ params }) {
         )}
       </div>
 
+      {/* ── What is Monte Carlo? ── */}
+      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5">
+        <p className="text-xs font-bold text-blue-800 uppercase tracking-wide mb-2">🎲 What is Monte Carlo Simulation?</p>
+        <p className="text-xs text-blue-700 leading-relaxed mb-2">
+          In the real world, your portfolio never earns a steady 10% every year — some years it surges 20%,
+          others it drops 8%. A Monte Carlo simulation runs <strong>hundreds of possible futures</strong> where annual
+          returns randomly vary (mimicking real market behaviour), then asks: <em>"In how many of these futures did
+          the money last long enough?"</em>
+        </p>
+        <p className="text-xs text-blue-700 leading-relaxed">
+          The result — your <strong>survival probability</strong> — is far more honest than a single straight-line
+          projection. A score above <strong className="text-green-700">80%</strong> is considered financially safe;
+          below <strong className="text-amber-700">50%</strong> is a warning sign worth addressing.
+        </p>
+      </div>
+
       {/* Controls */}
       <div className="flex flex-wrap items-end gap-4 mb-5 p-3 bg-gray-50 rounded-lg">
         <div>
@@ -108,6 +124,12 @@ export default function MonteCarloPanel({ params }) {
             <option value={6}>High (σ = 6%)</option>
             <option value={8}>Very High (σ = 8%)</option>
           </select>
+          {/* σ explanation */}
+          <p className="text-xs text-gray-400 mt-1.5 leading-snug max-w-[220px]">
+            <strong className="text-gray-500">σ (sigma)</strong> measures how wildly returns swing
+            year-to-year. Low σ = stable FD-like returns. High σ = equity boom-bust cycles.
+            Indian equity markets typically sit at <strong className="text-gray-500">σ ≈ 6–8%</strong>.
+          </p>
         </div>
         {result && (
           <div className="flex gap-2">
