@@ -260,13 +260,13 @@ export default function App() {
       )}
 
       {/* ── Main layout: sidebar + content ── */}
-      <div className="flex flex-1 max-w-screen-2xl mx-auto w-full overflow-hidden">
+      <div className="flex flex-1 max-w-screen-2xl mx-auto w-full">
 
         {/* ── Sidebar ── */}
         <aside className={`
           fixed md:sticky top-0 md:top-14 z-20 md:z-auto
           w-[300px] md:w-80 bg-white border-r border-gray-100 shadow-xl md:shadow-sm
-          flex flex-col h-screen md:h-[calc(100vh-56px)]
+          flex flex-col h-screen md:h-auto md:self-start
           transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}>
@@ -286,7 +286,7 @@ export default function App() {
         </aside>
 
         {/* ── Right content ── */}
-        <main className="flex-1 overflow-y-auto custom-scroll min-w-0">
+        <main className="flex-1 min-w-0">
           <div className="p-3 sm:p-5 space-y-4 sm:space-y-5">
 
             {/* ── Hero Banner ── */}

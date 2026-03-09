@@ -30,7 +30,7 @@ function Section({ title, icon, children, defaultOpen = true }) {
 
 export default function InputPanel({ params, onUpdate, onReset }) {
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full md:h-auto flex flex-col">
       {/* Panel header */}
       <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100 bg-gray-50">
         <h2 className="text-sm font-bold text-gray-700">Simulation Parameters</h2>
@@ -42,7 +42,7 @@ export default function InputPanel({ params, onUpdate, onReset }) {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scroll">
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scroll md:flex-none md:overflow-visible">
         {/* ── Core Parameters ── */}
         <Section title="Core Parameters" icon="📊">
           <SliderInput
