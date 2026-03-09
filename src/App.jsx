@@ -117,6 +117,69 @@ function HeroBanner({ onDismiss }) {
   );
 }
 
+/* ─── Privacy / Trust Banner ─────────────────────────────────── */
+function PrivacyBanner() {
+  return (
+    <div className="relative bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 rounded-xl overflow-hidden shadow-md">
+      {/* Subtle dot-grid overlay */}
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, white 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
+        }}
+      />
+
+      <div className="relative px-5 py-4 sm:px-7 sm:py-5">
+        {/* Headline row */}
+        <div className="flex items-start sm:items-center gap-3 sm:gap-4 mb-2.5">
+          <div className="flex-shrink-0 bg-white/20 rounded-full w-11 h-11 flex items-center justify-center text-2xl shadow-inner">
+            🛡️
+          </div>
+          <div>
+            <p className="text-white font-black text-base sm:text-xl leading-snug tracking-tight">
+              100% Private &mdash; Runs Entirely In Your Browser
+            </p>
+            <p className="text-emerald-200 text-[11px] sm:text-xs font-semibold uppercase tracking-widest mt-0.5">
+              Zero server · Zero data collection · Zero surveillance
+            </p>
+          </div>
+        </div>
+
+        {/* Body text */}
+        <p className="text-emerald-50 text-xs sm:text-sm leading-relaxed mb-3">
+          This calculator runs <strong className="text-white">only within your browser</strong> — on your own device (mobile or computer).{' '}
+          No numbers, no inputs, no results are ever transmitted to any server.
+          All financial modelling and calculations happen{' '}
+          <strong className="text-white">locally, in real-time, entirely in client-side code.</strong>{' '}
+          What you type stays with you — not stored, not logged, not seen by anyone.{' '}
+          <span className="text-white font-semibold">Feel completely safe to experiment freely. ✌️</span>
+        </p>
+
+        {/* Trust chips */}
+        <div className="flex flex-wrap gap-2">
+          {[
+            { icon: '🚫', text: 'No Server Calls' },
+            { icon: '💻', text: '100% Client-Side' },
+            { icon: '🙈', text: 'Zero Data Storage' },
+            { icon: '🔐', text: 'Your Numbers Stay Yours' },
+            { icon: '📴', text: 'Works Offline Too' },
+          ].map(chip => (
+            <span
+              key={chip.text}
+              className="inline-flex items-center gap-1.5 text-xs bg-white/15 hover:bg-white/25 transition-colors border border-white/20 rounded-full px-3 py-1 text-white font-semibold"
+            >
+              <span>{chip.icon}</span>
+              {chip.text}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Page Footer ────────────────────────────────────────────── */
 function PageFooter() {
   return (
@@ -130,6 +193,21 @@ function PageFooter() {
           Please tweak inputs as per your investment style and actual expenses.
           This is for educational purposes only and does not constitute financial advice.
         </p>
+      </div>
+
+      {/* Feedback / contact */}
+      <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <p className="text-xs text-blue-700 leading-relaxed">
+          <span className="text-base mr-1">💬</span>
+          <span className="font-bold">Got feedback or want to thank us?</span>
+          {' '}We'd love to hear from you — drop us a note!
+        </p>
+        <a
+          href="mailto:mahesh@algorithms365.com"
+          className="inline-flex items-center gap-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap flex-shrink-0"
+        >
+          ✉ mahesh@algorithms365.com
+        </a>
       </div>
 
       {/* Credit + fine print */}
@@ -288,6 +366,9 @@ export default function App() {
         {/* ── Right content ── */}
         <main className="flex-1 min-w-0">
           <div className="p-3 sm:p-5 space-y-4 sm:space-y-5">
+
+            {/* ── Privacy / Trust Banner ── */}
+            <PrivacyBanner />
 
             {/* ── Hero Banner ── */}
             {!heroDismissed && <HeroBanner onDismiss={dismissHero} />}
