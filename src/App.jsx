@@ -14,6 +14,7 @@ import { formatINR } from './utils/formatting';
 /* ─── Default simulation parameters ─────────────────────────── */
 const DEFAULT_PARAMS = {
   currentAge:               40,
+  retireAge:                40,            // same as currentAge → already retired
   lifeExpectancy:           90,
   initialCorpus:            50_000_000,    // ₹5 Crore
   monthlyExpense:           150_000,        // ₹1.5 Lakh (₹18L/yr)
@@ -248,9 +249,25 @@ export default function App() {
     [params]
   );
 
-  /* ── Param updater ───────────────────────────────────────── */
+  /* ── Param updater (with cascading age constraints) ─────── */
   const updateParam = useCallback((key, value) => {
-    setParams(prev => ({ ...prev, [key]: value }));
+    setParams(prev => {
+      const next = { ...prev, [key]: value };
+      // Cascade: currentAge ≤ retireAge < lifeExpectancy
+      if (key === 'currentAge') {
+        next.retireAge      = Math.max(value, prev.retireAge);
+        next.lifeExpectancy = Math.max(next.retireAge + 1, prev.lifeExpectancy);
+      }
+      if (key === 'retireAge') {
+        next.currentAge     = Math.min(prev.currentAge, value);
+        next.lifeExpectancy = Math.max(value + 1, prev.lifeExpectancy);
+      }
+      if (key === 'lifeExpectancy') {
+        next.retireAge  = Math.min(prev.retireAge,  value - 1);
+        next.currentAge = Math.min(prev.currentAge, next.retireAge);
+      }
+      return next;
+    });
   }, []);
   const resetParams = useCallback(() => setParams(DEFAULT_PARAMS), []);
 

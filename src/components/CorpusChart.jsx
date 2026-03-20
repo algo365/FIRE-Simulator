@@ -16,8 +16,12 @@ function CustomTooltip({ active, payload, label }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-xl p-3 text-xs min-w-[190px]">
-      <div className="font-bold text-gray-700 mb-2 border-b pb-1.5">
-        Age {label} &nbsp;·&nbsp; {d.year}
+      <div className="font-bold text-gray-700 mb-2 border-b pb-1.5 flex justify-between items-center">
+        <span>Age {label} &nbsp;·&nbsp; {d.year}</span>
+        {d.preRetirement
+          ? <span className="text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded text-[10px]">Accumulating</span>
+          : <span className="text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded text-[10px]">Withdrawing</span>
+        }
       </div>
       {payload.map((entry, i) => (
         <div key={i} className="flex justify-between gap-4 mb-0.5">
@@ -34,7 +38,7 @@ function CustomTooltip({ active, payload, label }) {
           <span className="font-bold">{formatINR(d.yearBigExp)}</span>
         </div>
       )}
-      {d.withdrawalRate != null && (
+      {!d.preRetirement && d.withdrawalRate != null && (
         <div className="mt-1 text-gray-400 flex justify-between">
           <span>Withdrawal Rate</span>
           <span>{d.withdrawalRate.toFixed(1)}%</span>
@@ -55,7 +59,9 @@ export default function CorpusChart({ results, noWdResults, params, corpusZeroAg
     [results]
   );
 
-  const horizonLine = params.lifeExpectancy;
+  const horizonLine    = params.lifeExpectancy;
+  const retireAge      = params.retireAge ?? params.currentAge;
+  const hasPreRetire   = retireAge > params.currentAge;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
@@ -64,7 +70,10 @@ export default function CorpusChart({ results, noWdResults, params, corpusZeroAg
         <div>
           <h2 className="text-base font-bold text-gray-800">Corpus Projection</h2>
           <p className="text-xs text-gray-500 mt-0.5">
-            Year-by-year portfolio balance from age {params.currentAge} to {params.lifeExpectancy}
+            {hasPreRetire
+              ? `Accumulation age ${params.currentAge}→${retireAge}, then withdrawals to age ${params.lifeExpectancy}`
+              : `Year-by-year portfolio balance from age ${params.currentAge} to ${params.lifeExpectancy}`
+            }
           </p>
         </div>
         {corpusZeroAge ? (
@@ -127,6 +136,17 @@ export default function CorpusChart({ results, noWdResults, params, corpusZeroAg
             strokeDasharray="3 3"
             label={{ value: `Target: ${horizonLine}`, position: 'insideTopRight', fontSize: 11, fill: '#94A3B8' }}
           />
+
+          {/* Retirement start marker (only shown when pre-retirement phase exists) */}
+          {hasPreRetire && (
+            <ReferenceLine
+              x={retireAge}
+              stroke="#10B981"
+              strokeWidth={2}
+              strokeDasharray="5 3"
+              label={{ value: `🎯 Retire: ${retireAge}`, position: 'insideTopLeft', fontSize: 11, fill: '#059669' }}
+            />
+          )}
 
           {/* Big expense vertical markers */}
           {bigExpenseMarkers.map(d => (

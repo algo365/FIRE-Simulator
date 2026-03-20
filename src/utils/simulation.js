@@ -10,6 +10,7 @@
 export function runSimulation(params) {
   const {
     currentAge,
+    retireAge    = currentAge,   // default: already retired
     lifeExpectancy,
     initialCorpus,
     monthlyExpense,
@@ -25,21 +26,51 @@ export function runSimulation(params) {
   const inflationFactor = 1 + inflationRate / 100;
   const annualIncome    = additionalMonthlyIncome * 12;
   const annualSIP       = monthlySIP * 12;
+  const baseYear        = new Date().getFullYear();
 
   let corpus       = initialCorpus;
-  let annualExpense = monthlyExpense * 12;
+  let annualExpense = monthlyExpense * 12;   // today's expense, inflates to retireAge
   let corpusZeroAge = null;
   const results = [];
 
-  for (let age = currentAge; age <= lifeExpectancy; age++) {
-    // Apply age-specific expense adjustments (one-time, at entry of this age)
+  /* ── Pre-retirement phase: corpus grows, no withdrawals ─── */
+  for (let age = currentAge; age < retireAge; age++) {
+    const yearBigExp = bigExpenses
+      .filter(e => parseInt(e.age) === age)
+      .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+
+    const displayCorpus = Math.max(0, corpus);
+    results.push({
+      age,
+      year:          baseYear + (age - currentAge),
+      corpus:        displayCorpus,
+      annualExpense: 0,          // not withdrawing yet
+      annualIncome:  0,
+      annualSIP,
+      yearBigExp,
+      netWithdrawal: 0,
+      withdrawalRate: 0,
+      preRetirement: true,
+    });
+
+    if (corpus <= 0) {
+      if (corpusZeroAge === null) corpusZeroAge = age;
+      break;
+    }
+
+    corpus        = corpus * cagrFactor - yearBigExp + annualSIP;
+    annualExpense *= inflationFactor;   // expense inflates even before retirement
+  }
+
+  /* ── Retirement phase: standard SWP withdrawal ─────────── */
+  for (let age = retireAge; age <= lifeExpectancy; age++) {
+    // Apply age-specific expense adjustments (one-time)
     expenseAdjustments
       .filter(adj => parseInt(adj.age) === age)
       .forEach(adj => {
         annualExpense *= (1 + parseFloat(adj.percentChange || 0) / 100);
       });
 
-    // One-time large expenses deducted at start of this age's year
     const yearBigExp = bigExpenses
       .filter(e => parseInt(e.age) === age)
       .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
@@ -50,7 +81,7 @@ export function runSimulation(params) {
 
     results.push({
       age,
-      year:          new Date().getFullYear() + (age - currentAge),
+      year:          baseYear + (age - currentAge),
       corpus:        displayCorpus,
       annualExpense,
       annualIncome,
@@ -58,6 +89,7 @@ export function runSimulation(params) {
       yearBigExp,
       netWithdrawal,
       withdrawalRate,
+      preRetirement: false,
     });
 
     if (corpus <= 0) {
@@ -65,14 +97,12 @@ export function runSimulation(params) {
       break;
     }
 
-    // Compute next year corpus
     corpus = corpus * cagrFactor
            - annualExpense
            - yearBigExp
            + annualIncome
            + annualSIP;
 
-    // Inflate expenses for next year
     annualExpense *= inflationFactor;
   }
 

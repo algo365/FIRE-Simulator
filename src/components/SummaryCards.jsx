@@ -29,11 +29,16 @@ export default function SummaryCards({ results, corpusZeroAge, params }) {
   const first = results[0];
   const last  = results[results.length - 1];
 
-  const finalCorpus     = last.corpus;
-  const annualWithdrawal = first.netWithdrawal;
-  const initialWithdrawalRate = first.withdrawalRate;
-  const survives        = corpusZeroAge === null;
-  const retirementYears = params.lifeExpectancy - params.currentAge;
+  // Use first *retirement* row for withdrawal figures (pre-retirement rows have netWithdrawal=0)
+  const firstRetirement = results.find(r => !r.preRetirement) ?? first;
+
+  const finalCorpus           = last.corpus;
+  const annualWithdrawal      = firstRetirement.netWithdrawal;
+  const initialWithdrawalRate = firstRetirement.withdrawalRate;
+  const survives              = corpusZeroAge === null;
+  const retirementYears       = params.lifeExpectancy - params.currentAge;
+  const retireAge             = params.retireAge ?? params.currentAge;
+  const hasPreRetire          = retireAge > params.currentAge;
 
   // Real return (inflation-adjusted)
   const realReturn = params.cagr - params.inflationRate;
@@ -68,12 +73,14 @@ export default function SummaryCards({ results, corpusZeroAge, params }) {
       <Card
         label="Starting Corpus"
         value={formatINR(params.initialCorpus)}
-        sub={`Age ${params.currentAge} → ${params.lifeExpectancy}`}
+        sub={hasPreRetire
+          ? `Age ${params.currentAge} · retire at ${retireAge} → ${params.lifeExpectancy}`
+          : `Age ${params.currentAge} → ${params.lifeExpectancy}`}
         color="blue"
         icon="🏦"
       />
       <Card
-        label="Annual Withdrawal"
+        label={hasPreRetire ? 'Withdrawal at Retirement' : 'Annual Withdrawal'}
         value={formatINR(annualWithdrawal)}
         sub={`${formatPct(initialWithdrawalRate)} initial withdrawal rate`}
         color={initialWithdrawalRate > 6 ? 'amber' : 'green'}

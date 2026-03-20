@@ -18,6 +18,7 @@ function gaussianRandom(mean, stdDev) {
 export function runMonteCarlo(params, numSims = 1000, volatility = 4) {
   const {
     currentAge,
+    retireAge    = currentAge,
     lifeExpectancy,
     initialCorpus,
     monthlyExpense,
@@ -57,13 +58,21 @@ export function runMonteCarlo(params, numSims = 1000, volatility = 4) {
         .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
 
       const yearReturn = gaussianRandom(cagr, volatility) / 100;
-      corpus = corpus * (1 + yearReturn)
-             - annualExpense
-             - yearBigExp
-             + annualIncome
-             + annualSIP;
 
-      annualExpense *= inflationFactor;
+      if (age < retireAge) {
+        // Pre-retirement: corpus grows + SIP, no living-expense withdrawals
+        corpus = corpus * (1 + yearReturn) - yearBigExp + annualSIP;
+        annualExpense *= inflationFactor;  // expense inflates toward retireAge
+      } else {
+        // Retirement: full SWP withdrawal
+        corpus = corpus * (1 + yearReturn)
+               - annualExpense
+               - yearBigExp
+               + annualIncome
+               + annualSIP;
+        annualExpense *= inflationFactor;
+      }
+
       if (corpus <= 0) alive = false;
     }
   }

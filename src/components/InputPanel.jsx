@@ -48,15 +48,27 @@ export default function InputPanel({ params, onUpdate, onReset }) {
           <SliderInput
             label="Current Age"
             value={params.currentAge}
-            min={25} max={60} step={1}
-            onChange={v => onUpdate('currentAge', Math.min(v, params.lifeExpectancy - 1))}
+            min={18} max={75} step={1}
+            onChange={v => onUpdate('currentAge', v)}
             format={v => `${v} yrs`}
+          />
+          <SliderInput
+            label="Retire at Age"
+            value={params.retireAge}
+            min={params.currentAge} max={Math.min(params.lifeExpectancy - 1, 80)} step={1}
+            onChange={v => onUpdate('retireAge', v)}
+            format={v => `${v} yrs`}
+            hint={
+              params.retireAge === params.currentAge
+                ? '✅ Already retired — withdrawals start now'
+                : `⏳ ${params.retireAge - params.currentAge} yr${params.retireAge - params.currentAge !== 1 ? 's' : ''} until retirement — corpus grows until then`
+            }
           />
           <SliderInput
             label="Life Expectancy"
             value={params.lifeExpectancy}
-            min={70} max={100} step={1}
-            onChange={v => onUpdate('lifeExpectancy', Math.max(v, params.currentAge + 1))}
+            min={Math.max(70, params.retireAge + 1)} max={100} step={1}
+            onChange={v => onUpdate('lifeExpectancy', v)}
             format={v => `${v} yrs`}
           />
           <SliderInput
